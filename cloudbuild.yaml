@@ -1,0 +1,10 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/liveramp-eng-ops-dev/test-spinnaker', '.']
+  timeout: 500s
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/liveramp-eng-ops-dev/test-spinnaker']
+options:
+    machineType: 'N1_HIGHCPU_8'
+timeout: 660s
+tags: ['test-spinnaker']
