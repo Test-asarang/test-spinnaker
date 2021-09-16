@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: default
+  name: bq-budget-datadog
+  labels:
+    app: bq-budget-datadog
+    tag: 1c00e52-dev
+  annotations:
+    git_commit: 1c00e52c2e9e636d64dab27d83f2c9d4816e9999
+    git_project: git@github.com:LiveRamp/DevOps-kube.git
+spec:
+  revisionHistoryLimit: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 0
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bq-budget-datadog
+  template:
+    metadata:
+      labels:
+        app: bq-budget-datadog
+        tag: 1c00e52-dev
+    spec:
+      volumes:
+      - name: service-account
+        secret:
+          secretName: sa-key-svc-bigquery-budget
+      containers:
+      - name: bq-budget-datadog
+        image: gcr.io/liveramp-eng/bq-budget-datadog:1c00e52-dev
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            memory: 256Mi
+            cpu: 250m
+          limits:
+            memory: 512Mi
+            cpu: 250m
+        env:
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: "/var/run/secrets/google-service-account/key.json"
+        - name: DOGSTATSD_SERVICE_HOST
+          value: dogstatsd.ops
+        - name: DOGSTATSD_SERVICE_PORT
+          value: '8125'
+        volumeMounts:
+        - name: service-account
+          mountPath: "/var/run/secrets/google-service-account"
+          readOnly: true
