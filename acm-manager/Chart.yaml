@@ -1,0 +1,10 @@
+version: 0.1.4
+apiVersion: v2
+appVersion: "1.0"
+description: installs the acm manager service
+name: acm-manager
+icon: https://kubernetes.io/images/favicon.png
+dependencies:
+  - name: base
+    version: ~0.1.0
+    repository: gs://charts-liveramp-net/infra/stable

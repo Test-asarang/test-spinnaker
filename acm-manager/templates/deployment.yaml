@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "base.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "base.labels" $ | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "base.fullname" $ }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "base.fullname" $ }}
+        version: {{ .Chart.Version | quote }}
+    spec:
+      serviceAccountName: {{ .Values.serviceAccount }}
+      containers:
+      - name: acm-manager
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+      

@@ -1,0 +1,12 @@
+replicaCount: 2
+
+#acm manager service account should be specified here
+serviceAccount: acm-manager-sa
+gcpServiceAccount: replace-me-sa@liveramp-eng-ops.iam.gserviceaccount.com
+
+serviceType: ClusterIP
+
+image: 
+  repository: gcr.io/liveramp-eng/acm_manager
+  tag: 024135f-7
+  pullPolicy: Always
